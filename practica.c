@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
     // Crear el fitxer amb permisos específics
     int fd = open(argv[1], O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
     if (fd == -1) {
-        error("Error creant el fitxer");
+        perror("Error creant el fitxer");
         exit(EXIT_FAILURE);
     }
 
@@ -27,28 +27,28 @@ int main(int argc, char *argv[]) {
     while ((bytes_llegits = read(STDIN_FILENO, buffer, BUFFER_SIZE)) > 0) {
         // Escriure a la sortida estàndard
         if (write(STDOUT_FILENO, buffer, bytes_llegits) == -1) {
-            error("Error escrivint a la sortida estàndard");
+            perror("Error escrivint a la sortida estàndard");
             close(fd);
             exit(EXIT_FAILURE);
         }
 
         // Escriure al fitxer
         if (write(fd, buffer, bytes_llegits) == -1) {
-            error("Error escrivint al fitxer");
+            perror("Error escrivint al fitxer");
             close(fd);
             exit(EXIT_FAILURE);
         }
     }
 
     if (bytes_llegits == -1) {
-        error("Error llegint de l'entrada estàndard");
+        perror("Error llegint de l'entrada estàndard");
         close(fd);
         exit(EXIT_FAILURE);
     }
 
     // Tancar el fitxer
     if (close(fd) == -1) {
-        error("Error tancant el fitxer");
+        perror("Error tancant el fitxer");
         exit(EXIT_FAILURE);
     }
 
